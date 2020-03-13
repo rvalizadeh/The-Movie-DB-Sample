@@ -5,7 +5,7 @@ import Results
 import com.google.gson.annotations.SerializedName
 
 
-data class NowPlayingResponseModel (
+data class NowPlayingResponse (
 
     @SerializedName("results") val results : List<Results>,
     @SerializedName("page") val page : Int,
