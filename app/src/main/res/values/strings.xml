@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">TheMovieDB</string>
+    <string name="failed_message">خطا در برقراری ارتباط</string>
 </resources>
