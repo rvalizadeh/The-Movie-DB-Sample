@@ -12,12 +12,12 @@ class NowPlayingViewModel(private val movieRepository: MovieRepository) : BaseVi
     val nowPlayingResponseLiveData = MutableLiveData<NowPlayingResponse?>()
 
     init {
-        getNowPlayingData()
+        getNowPlayingData(1)
     }
 
-    private fun getNowPlayingData() {
+    fun getNowPlayingData(page: Int) {
         launchDataLoad {
-            val response = movieRepository.nowPlayingData(1)
+            val response = movieRepository.nowPlayingData(page)
             when (response) {
                 is ResultWrapper.Success -> {
 
