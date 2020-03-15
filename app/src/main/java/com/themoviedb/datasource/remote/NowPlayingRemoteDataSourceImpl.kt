@@ -1,6 +1,6 @@
 package com.themoviedb.datasource.remote
 
-import com.themoviedb.models.NowPlayingResponse
+import com.themoviedb.model.NowPlayingResponse
 
 class NowPlayingRemoteDataSourceImpl(private val nowPlayingApi: NowPlayingApi) : NowPlayingRemoteDataSource {
 

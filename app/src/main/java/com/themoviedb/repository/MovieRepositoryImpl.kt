@@ -2,8 +2,8 @@ package com.themoviedb.repository
 
 import com.themoviedb.datasource.remote.NowPlayingRemoteDataSource
 import com.themoviedb.helper.safeApiCall
-import com.themoviedb.models.NowPlayingResponse
-import com.themoviedb.models.ResultWrapper
+import com.themoviedb.model.NowPlayingResponse
+import com.themoviedb.model.ResultWrapper
 
 class MovieRepositoryImpl (
     private val nowPlayingRemoteDataSource: NowPlayingRemoteDataSource

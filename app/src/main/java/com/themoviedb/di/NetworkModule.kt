@@ -1,6 +1,7 @@
-package com.themoviedb
+package com.themoviedb.di
 
-import android.content.Context
+import com.themoviedb.helper.AuthInterceptor
+import com.themoviedb.util.DataConstant
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module

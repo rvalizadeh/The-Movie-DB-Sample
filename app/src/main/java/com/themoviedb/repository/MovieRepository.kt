@@ -1,7 +1,7 @@
 package com.themoviedb.repository
 
-import com.themoviedb.models.NowPlayingResponse
-import com.themoviedb.models.ResultWrapper
+import com.themoviedb.model.NowPlayingResponse
+import com.themoviedb.model.ResultWrapper
 
 interface MovieRepository {
 

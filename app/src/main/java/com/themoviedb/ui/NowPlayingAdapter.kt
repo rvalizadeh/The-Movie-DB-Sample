@@ -1,4 +1,4 @@
-package com.themoviedb
+package com.themoviedb.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,9 +8,11 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
+import com.themoviedb.util.DataConstant
+import com.themoviedb.R
 import com.themoviedb.databinding.AdapterItemNowPlayingBinding
 import com.themoviedb.databinding.AdapterItemProgressBinding
-import com.themoviedb.models.Results
+import com.themoviedb.model.Results
 
 
 class NowPlayingAdapter(private var activity : AppCompatActivity , private var movies: MutableList<Results>?) : RecyclerView.Adapter<ViewHolder?>() {
@@ -103,11 +105,11 @@ class NowPlayingAdapter(private var activity : AppCompatActivity , private var m
 
                 val detailFragment: Fragment = DetailFragment()
                 val bundle = Bundle()
-                bundle.putParcelable(DataConstant.RESULT_KEY , movie)
+                bundle.putParcelable(DataConstant.RESULT_KEY, movie)
                 detailFragment.arguments = bundle
 
                 val ft = activity.supportFragmentManager.beginTransaction()
-                ft.replace(R.id.fragment , detailFragment , detailFragment.toString())
+                ft.replace(R.id.fragment, detailFragment , detailFragment.toString())
                 ft.addToBackStack(null)
                 ft.commit()
             }

@@ -6,7 +6,7 @@
 
         <variable
             name="results"
-            type="com.themoviedb.models.Results" />
+            type="com.themoviedb.model.Results" />
 
         <variable
             name="progress"

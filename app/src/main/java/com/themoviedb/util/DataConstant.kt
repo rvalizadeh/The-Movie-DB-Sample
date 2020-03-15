@@ -1,4 +1,4 @@
-package com.themoviedb
+package com.themoviedb.util
 
 class DataConstant{
    companion object{

@@ -1,4 +1,4 @@
-package com.themoviedb
+package com.themoviedb.ui
 
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
@@ -6,9 +6,10 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.themoviedb.R
 import com.themoviedb.base.BaseActivity
 import com.themoviedb.databinding.ActivityMainBinding
-import com.themoviedb.models.Results
+import com.themoviedb.model.Results
 import com.themoviedb.viewmodel.NowPlayingViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -27,7 +28,9 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this,
+            R.layout.activity_main
+        )
         viewModel.nowPlayingResponseLiveData.observe(this, Observer {
 
             list.addAll(it!!.results)
@@ -60,7 +63,8 @@ class MainActivity : BaseActivity() {
             setHasFixedSize(true)
             itemAnimator = DefaultItemAnimator()
             layoutManager = LinearLayoutManager(this@MainActivity, RecyclerView.VERTICAL, false)
-            adapter = NowPlayingAdapter(this@MainActivity, list)
+            adapter =
+                NowPlayingAdapter(this@MainActivity, list)
             addOnScrollListener(object :
                 PaginationScrollListener(layoutManager as LinearLayoutManager) {
 

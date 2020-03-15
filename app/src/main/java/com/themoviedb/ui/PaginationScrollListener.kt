@@ -1,4 +1,4 @@
-package com.themoviedb
+package com.themoviedb.ui
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView

@@ -3,8 +3,8 @@ package com.themoviedb.viewmodel
 import androidx.lifecycle.MutableLiveData
 import com.themoviedb.R
 import com.themoviedb.base.BaseViewModel
-import com.themoviedb.models.NowPlayingResponse
-import com.themoviedb.models.ResultWrapper
+import com.themoviedb.model.NowPlayingResponse
+import com.themoviedb.model.ResultWrapper
 import com.themoviedb.repository.MovieRepository
 
 class NowPlayingViewModel(private val movieRepository: MovieRepository) : BaseViewModel() {

@@ -1,8 +1,8 @@
 package com.themoviedb.helper
 
 import com.google.gson.Gson
-import com.themoviedb.models.ErrorResponse
-import com.themoviedb.models.ResultWrapper
+import com.themoviedb.model.ErrorResponse
+import com.themoviedb.model.ResultWrapper
 import retrofit2.HttpException
 import java.io.IOException
 
