@@ -11,9 +11,9 @@
                 android:innerRadiusRatio="3.25"
                 android:useLevel="true">
                 <gradient
-                    android:centerColor="#FF19371E"
-                    android:endColor="#FF19371E"
-                    android:startColor="#FF19371E"
+                    android:centerColor="@color/dark_green"
+                    android:endColor="@color/dark_green"
+                    android:startColor="@color/dark_green"
                     android:type="sweep" />
 
             </shape>
