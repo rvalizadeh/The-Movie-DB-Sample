@@ -1,12 +1,14 @@
 package com.themoviedb
 
-import Results
 import android.os.Bundle
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.themoviedb.base.BaseActivity
+import com.themoviedb.databinding.ActivityMainBinding
+import com.themoviedb.models.Results
 import com.themoviedb.viewmodel.NowPlayingViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -20,17 +22,17 @@ class MainActivity : BaseActivity() {
     private var isLoading = false
     private var isLastPage = false
     private var currentPage = PAGE_START
-    private var list : MutableList<Results>  = ArrayList()
+    private var list: MutableList<Results> = ArrayList()
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        viewModel.nowPlayingResponseLiveData.observe(this , Observer {
-
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        viewModel.nowPlayingResponseLiveData.observe(this, Observer {
 
             list.addAll(it!!.results)
 
-            when(currentPage == PAGE_START) {
+            when (currentPage == PAGE_START) {
                 true -> setupAdapter()
                 false -> (rc.adapter as NowPlayingAdapter).addAll(it!!.results)
             }
@@ -41,10 +43,9 @@ class MainActivity : BaseActivity() {
 
         })
 
-        viewModel.errorMessageLiveData.observe(this , Observer {
+        viewModel.errorMessageLiveData.observe(this, Observer {
 
         })
-
 
     }
 
@@ -53,14 +54,15 @@ class MainActivity : BaseActivity() {
         (rc.adapter as NowPlayingAdapter).addLoadingFooter()
     }
 
-    private fun setupAdapter(){
+    private fun setupAdapter() {
 
-        rc.apply {
+        binding.rc.apply {
             setHasFixedSize(true)
             itemAnimator = DefaultItemAnimator()
             layoutManager = LinearLayoutManager(this@MainActivity, RecyclerView.VERTICAL, false)
-            adapter = NowPlayingAdapter(this@MainActivity , list)
-            addOnScrollListener(object: PaginationScrollListener(layoutManager as LinearLayoutManager){
+            adapter = NowPlayingAdapter(this@MainActivity, list)
+            addOnScrollListener(object :
+                PaginationScrollListener(layoutManager as LinearLayoutManager) {
 
                 override fun loadMoreItems() {
                     isLoading = true

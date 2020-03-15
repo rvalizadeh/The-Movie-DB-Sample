@@ -1,7 +1,6 @@
 package com.themoviedb.models
 
 import Dates
-import Results
 import com.google.gson.annotations.SerializedName
 
 

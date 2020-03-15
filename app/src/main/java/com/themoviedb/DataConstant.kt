@@ -10,5 +10,6 @@ class DataConstant{
        const val LANGUAGE_KEY = "language"
        const val LANGUAGE_VALUE = "en-US"
        const val PAGE_KEY = "page"
+       const val RESULT_KEY = "result"
    }
 }

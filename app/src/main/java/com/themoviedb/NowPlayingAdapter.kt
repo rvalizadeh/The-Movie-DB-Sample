@@ -1,20 +1,19 @@
 package com.themoviedb
 
-import Results
-import android.content.Context
+import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
-import com.bumptech.glide.GlideContext
+import com.themoviedb.databinding.AdapterItemNowPlayingBinding
+import com.themoviedb.databinding.AdapterItemProgressBinding
+import com.themoviedb.models.Results
 
 
-class NowPlayingAdapter(private var context: Context , private var movies: MutableList<Results>?) : RecyclerView.Adapter<ViewHolder?>() {
+class NowPlayingAdapter(private var activity : AppCompatActivity , private var movies: MutableList<Results>?) : RecyclerView.Adapter<ViewHolder?>() {
 
     private var isLoadingAdded = true
 
@@ -25,35 +24,27 @@ class NowPlayingAdapter(private var context: Context , private var movies: Mutab
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         var viewHolder: ViewHolder
-        val inflater = LayoutInflater.from(parent.context)
         when (viewType) {
-            ITEM -> viewHolder = getDataViewHolder(parent, inflater)
-            else -> viewHolder = getLoadingViewHolder(parent, inflater)
+            ITEM -> viewHolder = getDataViewHolder(AdapterItemNowPlayingBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false))
+            else -> viewHolder = getLoadingViewHolder(AdapterItemProgressBinding.inflate(
+                LayoutInflater.from(parent.context) , parent , false))
         }
         return viewHolder
     }
 
-    private fun getDataViewHolder(parent: ViewGroup, inflater: LayoutInflater): ViewHolder {
-        val view: View = inflater.inflate(R.layout.adapter_item_now_playing, parent, false)
-        return MovieVH(view)
+    private fun getDataViewHolder(binding : AdapterItemNowPlayingBinding): ViewHolder {
+        return MovieVH(binding)
     }
 
-    private fun getLoadingViewHolder(parent: ViewGroup, inflater: LayoutInflater): ViewHolder {
-        val view: View = inflater.inflate(R.layout.adapter_item_progress, parent, false)
-        return LoadingVH(view)
+    private fun getLoadingViewHolder(binding: AdapterItemProgressBinding): ViewHolder {
+        return LoadingVH(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val movie = movies!![position]
         when (getItemViewType(position)) {
             ITEM -> {
-                val movieVH = holder as MovieVH
-                movieVH.tvTitle.text = movie.title
-                movieVH.tvReleaseDate.text = movie.release_date
-                movieVH.tvPercent.text = (movie.vote_average * 10).toInt().toString()
-                movieVH.progressBar.progress = (movie.vote_average * 10).toInt()
-                Glide.with(context).load(DataConstant.IMAGE_BASE_URL + movie.backdrop_path)
-                    .into(movieVH.backgroundImage)
+                (holder as MovieVH).bind(movies!![position])
             }
             LOADING -> {
 
@@ -98,15 +89,32 @@ class NowPlayingAdapter(private var context: Context , private var movies: Mutab
         return movies!![position]
     }
 
-    private inner class MovieVH(itemView: View) : ViewHolder(itemView) {
-        val backgroundImage: ImageView = itemView.findViewById(R.id.background_img)
-        val tvTitle: TextView = itemView.findViewById(R.id.tv_title)
-        val tvReleaseDate: TextView = itemView.findViewById(R.id.tv_release_date)
-        val tvPercent: TextView = itemView.findViewById(R.id.tv_percent)
-        val progressBar: ProgressBar = itemView.findViewById(R.id.circularProgressbar)
+    private inner class MovieVH(var binding : AdapterItemNowPlayingBinding ) : ViewHolder(binding.root) {
+        fun bind(movie: Results) {
+
+            binding.tvTitle.text = movie.title
+            binding.tvReleaseDate.text = movie.release_date
+            binding.tvPercent.text = (movie.vote_average * 10).toInt().toString()
+            binding.circularProgressbar.progress = (movie.vote_average * 10).toInt()
+            Glide.with(activity).load(DataConstant.IMAGE_BASE_URL + movie.backdrop_path)
+                .into(binding.backgroundImg)
+
+            binding.cardView.setOnClickListener{
+
+                val detailFragment: Fragment = DetailFragment()
+                val bundle = Bundle()
+                bundle.putParcelable(DataConstant.RESULT_KEY , movie)
+                detailFragment.arguments = bundle
+
+                val ft = activity.supportFragmentManager.beginTransaction()
+                ft.replace(R.id.fragment , detailFragment , detailFragment.toString())
+                ft.addToBackStack(null)
+                ft.commit()
+            }
+        }
     }
 
-    private inner class LoadingVH(itemView: View) : ViewHolder(itemView)
+    private inner class LoadingVH(binding: AdapterItemProgressBinding) : ViewHolder(binding.root)
 
 
 }
