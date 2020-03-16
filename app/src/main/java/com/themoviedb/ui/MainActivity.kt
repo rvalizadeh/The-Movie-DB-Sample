@@ -28,13 +28,11 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this,
-            R.layout.activity_main
-        )
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+
         viewModel.nowPlayingResponseLiveData.observe(this, Observer {
 
             list.addAll(it!!.results)
-
             when (currentPage == PAGE_START) {
                 true -> setupAdapter()
                 false -> (rc.adapter as NowPlayingAdapter).addAll(it!!.results)

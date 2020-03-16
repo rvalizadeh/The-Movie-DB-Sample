@@ -15,7 +15,10 @@ import com.themoviedb.databinding.AdapterItemProgressBinding
 import com.themoviedb.model.Results
 
 
-class NowPlayingAdapter(private var activity : AppCompatActivity , private var movies: MutableList<Results>?) : RecyclerView.Adapter<ViewHolder?>() {
+class NowPlayingAdapter(
+    private var activity: AppCompatActivity,
+    private var movies: MutableList<Results>?
+) : RecyclerView.Adapter<ViewHolder?>() {
 
     private var isLoadingAdded = true
 
@@ -27,15 +30,21 @@ class NowPlayingAdapter(private var activity : AppCompatActivity , private var m
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         var viewHolder: ViewHolder
         when (viewType) {
-            ITEM -> viewHolder = getDataViewHolder(AdapterItemNowPlayingBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false))
-            else -> viewHolder = getLoadingViewHolder(AdapterItemProgressBinding.inflate(
-                LayoutInflater.from(parent.context) , parent , false))
+            ITEM -> viewHolder = getDataViewHolder(
+                AdapterItemNowPlayingBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+            )
+            else -> viewHolder = getLoadingViewHolder(
+                AdapterItemProgressBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+            )
         }
         return viewHolder
     }
 
-    private fun getDataViewHolder(binding : AdapterItemNowPlayingBinding): ViewHolder {
+    private fun getDataViewHolder(binding: AdapterItemNowPlayingBinding): ViewHolder {
         return MovieVH(binding)
     }
 
@@ -80,18 +89,12 @@ class NowPlayingAdapter(private var activity : AppCompatActivity , private var m
     fun removeLoadingFooter() {
         isLoadingAdded = false
         val position = movies!!.size - 1
-        val item = getItem(position)
-        if (item != null) {
-            movies!!.removeAt(position)
-            notifyItemRemoved(position)
-        }
+        movies!!.removeAt(position)
+        notifyItemRemoved(position)
     }
 
-    fun getItem(position: Int): Results {
-        return movies!![position]
-    }
-
-    private inner class MovieVH(var binding : AdapterItemNowPlayingBinding ) : ViewHolder(binding.root) {
+    private inner class MovieVH(var binding: AdapterItemNowPlayingBinding) :
+        ViewHolder(binding.root) {
         fun bind(movie: Results) {
 
             binding.tvTitle.text = movie.title
@@ -101,22 +104,26 @@ class NowPlayingAdapter(private var activity : AppCompatActivity , private var m
             Glide.with(activity).load(DataConstant.IMAGE_BASE_URL + movie.backdrop_path)
                 .into(binding.backgroundImg)
 
-            binding.cardView.setOnClickListener{
+            binding.cardView.setOnClickListener {
 
-                val detailFragment: Fragment = DetailFragment()
-                val bundle = Bundle()
-                bundle.putParcelable(DataConstant.RESULT_KEY, movie)
-                detailFragment.arguments = bundle
+                clickHandler(movie)
 
-                val ft = activity.supportFragmentManager.beginTransaction()
-                ft.replace(R.id.fragment, detailFragment , detailFragment.toString())
-                ft.addToBackStack(null)
-                ft.commit()
             }
         }
     }
 
     private inner class LoadingVH(binding: AdapterItemProgressBinding) : ViewHolder(binding.root)
 
+    private fun clickHandler(movie: Results) {
+        val detailFragment: Fragment = DetailFragment()
+        val bundle = Bundle()
+        bundle.putParcelable(DataConstant.RESULT_KEY, movie)
+        detailFragment.arguments = bundle
+
+        val ft = activity.supportFragmentManager.beginTransaction()
+        ft.replace(R.id.fragment, detailFragment, detailFragment.toString())
+        ft.addToBackStack(null)
+        ft.commit()
+    }
 
 }
