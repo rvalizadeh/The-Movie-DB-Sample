@@ -1,6 +1,9 @@
 package com.themoviedb.ui
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -31,10 +34,13 @@ class MainActivity : BaseActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         viewModel.nowPlayingResponseLiveData.observe(this, Observer {
-
+            binding.progress.visibility = View.GONE
             list.addAll(it!!.results)
             when (currentPage == PAGE_START) {
-                true -> setupAdapter()
+                true -> {
+                    setupAdapter()
+                    setupTextChangeListener()
+                }
                 false -> (rc.adapter as NowPlayingAdapter).addAll(it!!.results)
             }
 
@@ -45,7 +51,7 @@ class MainActivity : BaseActivity() {
         })
 
         viewModel.errorMessageLiveData.observe(this, Observer {
-
+            binding.progress.visibility = View.GONE
         })
 
     }
@@ -61,8 +67,15 @@ class MainActivity : BaseActivity() {
             setHasFixedSize(true)
             itemAnimator = DefaultItemAnimator()
             layoutManager = LinearLayoutManager(this@MainActivity, RecyclerView.VERTICAL, false)
-            adapter =
-                NowPlayingAdapter(this@MainActivity, list)
+            adapter = NowPlayingAdapter(this@MainActivity, list)
+            setScrollListener()
+        }
+    }
+
+    private fun setScrollListener() {
+
+        binding.rc.apply {
+
             addOnScrollListener(object :
                 PaginationScrollListener(layoutManager as LinearLayoutManager) {
 
@@ -86,6 +99,32 @@ class MainActivity : BaseActivity() {
 
             })
         }
-
     }
+
+    private fun removeScrollListener(){
+        binding.rc.clearOnScrollListeners()
+    }
+
+
+    private fun setupTextChangeListener() {
+        binding.etSearch.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                when (binding.etSearch.text?.isEmpty()) {
+                    true -> setScrollListener()
+                    else -> removeScrollListener()
+                }
+                (rc.adapter as NowPlayingAdapter).filter.filter(binding.etSearch.text)
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+        })
+    }
+
 }
